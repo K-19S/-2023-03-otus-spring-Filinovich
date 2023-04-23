@@ -13,7 +13,11 @@ import ru.otus.filinovich.service.user.UserServiceImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 class StudentTestingServiceTest {
 
@@ -27,10 +31,14 @@ class StudentTestingServiceTest {
         UserService userService = new UserServiceImpl();
         testingService = spy(new StudentTestingService(questionService, userService));
         ReflectionTestUtils.setField(testingService, "requiredNumberOfRightAnswers", 4);
-        ReflectionTestUtils.setField(testingService, "passedMessage", "Congratulations, %s! You passed out test!");
-        ReflectionTestUtils.setField(testingService, "failedMessage", "Sorry, %s, you didn't pass the test.");
-        ReflectionTestUtils.setField(testingService, "scoringMessage", "You need %d correct answers to pass the test. you scored %d");
-        ReflectionTestUtils.setField(testingService, "errorMessage", "Sorry. Something went wrong");
+        ReflectionTestUtils.setField(testingService,
+                "passedMessage", "Congratulations, %s! You passed out test!");
+        ReflectionTestUtils.setField(testingService,
+                "failedMessage", "Sorry, %s, you didn't pass the test.");
+        ReflectionTestUtils.setField(testingService,
+                "scoringMessage", "You need %d correct answers to pass the test. you scored %d");
+        ReflectionTestUtils.setField(testingService,
+                "errorMessage", "Sorry. Something went wrong");
     }
 
     @Test

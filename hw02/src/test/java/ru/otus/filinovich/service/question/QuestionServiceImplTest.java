@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.filinovich.CommonTest;
+import ru.otus.filinovich.AbstractCommonTest;
 import ru.otus.filinovich.dao.QuestionDao;
 import ru.otus.filinovich.domain.ListOfQuestion;
 import ru.otus.filinovich.domain.Question;
@@ -15,10 +15,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionServiceImplTest extends CommonTest {
+public class QuestionServiceImplTest extends AbstractCommonTest {
 
     @Mock
     private QuestionDao questionDao;
@@ -41,7 +44,7 @@ public class QuestionServiceImplTest extends CommonTest {
     }
 
     @Test
-    void askQuestions_correctAnswers() throws IOException {
+    void askQuestionsCorrectAnswers() throws IOException {
         ListOfQuestion listOfQuestion = generateTestListOfQuestion();
         ResultTesting actual = generateTestResultTesting(listOfQuestion);
         when(questionDao.getQuestions()).thenReturn(listOfQuestion);
@@ -54,7 +57,7 @@ public class QuestionServiceImplTest extends CommonTest {
     }
 
     @Test
-    void askQuestions_uncorrectanswers() throws IOException {
+    void askQuestionsUncorrectanswers() throws IOException {
         ListOfQuestion listOfQuestion = generateTestListOfQuestion();
         when(questionDao.getQuestions()).thenReturn(listOfQuestion);
         BufferedReader mock = mock(BufferedReader.class);

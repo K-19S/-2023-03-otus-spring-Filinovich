@@ -2,14 +2,14 @@ package ru.otus.filinovich.dao;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-import ru.otus.filinovich.CommonTest;
+import ru.otus.filinovich.AbstractCommonTest;
 import ru.otus.filinovich.domain.ListOfQuestion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QuestionDaoCsvTest extends CommonTest {
+class QuestionDaoCsvTest extends AbstractCommonTest {
 
-    private static final QuestionDaoCsv questionDaoCsv = new QuestionDaoCsv();
+    private final QuestionDaoCsv questionDaoCsv = new QuestionDaoCsv();
 
     @Test
     void getQuestionsTest() {
