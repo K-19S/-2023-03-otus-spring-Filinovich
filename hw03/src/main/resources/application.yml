@@ -1,0 +1,10 @@
+application:
+  locale: ru_RU
+  required_number_of_right_answers: 4
+
+spring:
+  messages:
+    basename: "testing"
+    encoding: "UTF-8"
+  profiles:
+    active: dev
