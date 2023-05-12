@@ -1,0 +1,9 @@
+spring:
+  messages:
+    basename: "testing_test"
+    encoding: "UTF-8"
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true
