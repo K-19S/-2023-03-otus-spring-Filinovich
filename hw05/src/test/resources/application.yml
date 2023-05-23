@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:hsqldb:mem:testdb
+    username: sa
+    password:
+  liquibase:
+    enabled: true
+    contexts: test
+  shell:
+    interactive:
+      enabled: false
