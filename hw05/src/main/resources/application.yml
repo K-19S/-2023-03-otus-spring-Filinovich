@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:hsqldb:mem:prod_db
+    username: sa
+    password:
+  liquibase:
+    enabled: true
+
+application:
+  locale: ru_RU
