@@ -1,7 +1,8 @@
-package ru.otus.filinovich.service;
+package ru.otus.filinovich.service.io.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.otus.filinovich.service.io.IOService;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -54,7 +55,7 @@ public class ConsoleIOService implements IOService {
     }
 
     @Override
-    public Long readLong(Long min, Long max) {
+    public Long readLong(int min, int max) {
         do {
             Long num = readLong();
             if (num >= min && num <= max) {

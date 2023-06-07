@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.filinovich.dao.book_comments.impl.BookCommentRepositoryJpa;
 import ru.otus.filinovich.domain.Book;
 import ru.otus.filinovich.domain.BookComment;
 
@@ -21,8 +22,6 @@ class BookCommentRepositoryJpaTest {
 
     private static final Long CORRECT_BOOK_ID = 1L;
 
-    private static final Long INCORRECT_BOOK_ID = -100L;
-
     private static final Long INCORRECT_COMMENT_ID = -100L;
 
     @Autowired
@@ -30,22 +29,6 @@ class BookCommentRepositoryJpaTest {
 
     @Autowired
     private TestEntityManager em;
-
-    @Test
-    public void getByCorrectBookId() {
-        var bookId = CORRECT_BOOK_ID;
-        List<BookComment> actualList = bookCommentRepositoryJpa.getByBookId(bookId);
-        var query = em.getEntityManager().createQuery(
-                "select c from BookComment c where c.book.id = :id", BookComment.class);
-        query.setParameter("id", bookId);
-        List<BookComment> expectedList = query.getResultList();
-        assertThat(actualList).isEqualTo(expectedList);
-    }
-
-    @Test
-    public void getByIncorrectBookId() {
-        assertThat(bookCommentRepositoryJpa.getByBookId(INCORRECT_BOOK_ID)).isEmpty();
-    }
 
     @Test
     public void getByCorrectIdTest() {

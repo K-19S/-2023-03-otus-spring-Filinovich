@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.filinovich.dao.book.impl.BookRepositoryJpa;
 import ru.otus.filinovich.domain.Author;
 import ru.otus.filinovich.domain.Book;
 import ru.otus.filinovich.domain.BookComment;

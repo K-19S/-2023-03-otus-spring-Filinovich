@@ -1,4 +1,4 @@
-package ru.otus.filinovich.service.book;
+package ru.otus.filinovich.service.book.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,9 +7,11 @@ import ru.otus.filinovich.dao.book.BookRepository;
 import ru.otus.filinovich.domain.Author;
 import ru.otus.filinovich.domain.Book;
 import ru.otus.filinovich.domain.Genre;
-import ru.otus.filinovich.service.IOService;
 import ru.otus.filinovich.service.author.AuthorService;
+import ru.otus.filinovich.service.book.BookFieldUpdater;
+import ru.otus.filinovich.service.book.BookService;
 import ru.otus.filinovich.service.genre.GenreService;
+import ru.otus.filinovich.service.user.interaction.UserInteractionService;
 import ru.otus.filinovich.util.MessageProvider;
 
 import java.util.HashMap;
@@ -24,15 +26,14 @@ public class BookServiceImpl implements BookService {
 
     private final GenreService genreService;
 
-    private final IOService ioService;
-
     private final BookRepository bookRepository;
 
     private final MessageProvider messageProvider;
 
+    private final UserInteractionService userInteractionService;
+
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         return bookRepository.getAll();
     }
@@ -50,7 +51,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Book getBookById(Long id) {
         return bookRepository.getById(id).orElseThrow();
     }
@@ -65,23 +65,21 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book getBookByIdWithPromptAll(String prompt) {
-        getAllBooks().forEach(book -> {
-            ioService.outputString(getDescriptionOfBookWithId(book));
-        });
-
-        Book book = null;
+        Book chosenBook;
+        List<Book> books = getAllBooks();
         do {
-            Long choseBookId = ioService.readLongWithPrompt(prompt);
-            book = getBookById(choseBookId);
-        } while (book == null);
-        return book;
+            books.forEach(book -> userInteractionService.showText(getDescriptionOfBookWithId(book)));
+            Long choseBookId = userInteractionService.chooseBookIdFromList(books);
+            chosenBook = getBookById(choseBookId);
+        } while (chosenBook == null);
+        return chosenBook;
     }
 
     @Override
     @Transactional
     public Book createNewBook() {
         String prompt = messageProvider.getMessage("user_input.book_name");
-        String bookName = ioService.readStringWithPrompt(prompt);
+        String bookName = userInteractionService.getTextWithPrompt(prompt);
 
         Genre genre = genreService.getGenreByIdWithPromptAll();
         Author author = authorService.getAuthorByIdWithPromptAll();
@@ -112,12 +110,12 @@ public class BookServiceImpl implements BookService {
         Map<Long, String> fieldsMap = getBookFieldMap();
         Map<String, BookFieldUpdater> updatersMap = getBookUpdatersMapFromFieldsFromBook(fieldsMap, updatedBook);
         fieldsMap.keySet().forEach(fieldNum ->
-            ioService.outputString(fieldNum + ". " + fieldsMap.get(fieldNum))
+            userInteractionService.showText(fieldNum + ". " + fieldsMap.get(fieldNum))
         );
         String prompt = messageProvider.getMessage("user_input.edit_field");
-        String fieldName = null;
+        String fieldName;
         do {
-            Long chosenFieldNumber = ioService.readLongWithPrompt(prompt);
+            Long chosenFieldNumber = userInteractionService.getLongWithPrompt(prompt);
             fieldName = fieldsMap.get(chosenFieldNumber);
         } while (fieldName == null);
         updatersMap.get(fieldName).update();
@@ -137,7 +135,7 @@ public class BookServiceImpl implements BookService {
         Map<String, BookFieldUpdater> updatersMap = new HashMap<>();
         updatersMap.put(fields.get(1L), () -> {
             String prompt = messageProvider.getMessage("user_input.book_new_name");
-            String newName = ioService.readStringWithPrompt(prompt);
+            String newName = userInteractionService.getTextWithPrompt(prompt);
             updatedBook.setName(newName);
         });
         updatersMap.put(fields.get(2L), () -> {

@@ -1,25 +1,18 @@
-package ru.otus.filinovich.dao.book_comments;
+package ru.otus.filinovich.dao.book_comments.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
+import ru.otus.filinovich.dao.book_comments.BookCommentRepository;
 import ru.otus.filinovich.domain.BookComment;
 
-import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookCommentRepositoryJpa implements BookCommentRepository {
 
     private final EntityManager em;
-
-    @Override
-    public List<BookComment> getByBookId(Long id) {
-        var query = em.createQuery("select c from BookComment c where c.book.id = :id", BookComment.class);
-        query.setParameter("id", id);
-        return query.getResultList();
-    }
 
     @Override
     public Optional<BookComment> getById(Long id) {
@@ -39,8 +32,6 @@ public class BookCommentRepositoryJpa implements BookCommentRepository {
 
     @Override
     public void deleteById(Long id) {
-        var query = em.createQuery("delete from BookComment where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        getById(id).ifPresent(em::remove);
     }
 }

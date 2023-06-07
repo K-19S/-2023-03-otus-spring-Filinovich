@@ -1,4 +1,4 @@
-package ru.otus.filinovich.service.book_comment;
+package ru.otus.filinovich.service.book_comment.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,8 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.filinovich.dao.book_comments.BookCommentRepository;
 import ru.otus.filinovich.domain.Book;
 import ru.otus.filinovich.domain.BookComment;
-import ru.otus.filinovich.service.IOService;
 import ru.otus.filinovich.service.book.BookService;
+import ru.otus.filinovich.service.book_comment.BookCommentService;
+import ru.otus.filinovich.service.user.interaction.UserInteractionService;
 import ru.otus.filinovich.util.MessageProvider;
 
 import java.util.List;
@@ -20,14 +21,13 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     private final BookService bookService;
 
+    private final UserInteractionService userInteractionService;
+
     private final MessageProvider messageProvider;
 
-    private final IOService ioService;
-
     @Override
-    @Transactional(readOnly = true)
     public List<BookComment> getAllCommentsByBookId(Long id) {
-        return bookCommentRepository.getByBookId(id);
+        return bookService.getBookById(id).getComments();
     }
 
     @Override
@@ -46,13 +46,11 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public BookComment getCommentById(Long id) {
         return bookCommentRepository.getById(id).orElseThrow();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public String getCommentDescriptionById(Long id) {
         BookComment comment = getCommentById(id);
         return getCommentDescription(comment);
@@ -82,7 +80,7 @@ public class BookCommentServiceImpl implements BookCommentService {
     @Transactional
     public BookComment updateComment() {
         String commentPrompt = messageProvider.getMessage("comments.select_comment_id");
-        Long commentId = ioService.readLongWithPrompt(commentPrompt);
+        Long commentId = userInteractionService.getLongWithPrompt(commentPrompt);
         BookComment comment = getCommentById(commentId);
         String commentText = getNewCommentText();
         comment.setText(commentText);
@@ -98,7 +96,7 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     private String getNewCommentText() {
         String commentTextPrompt = messageProvider.getMessage("comments.enter_text");
-        return ioService.readStringWithPrompt(commentTextPrompt);
+        return userInteractionService.getTextWithPrompt(commentTextPrompt);
     }
 
     private Book chooseBookFromList() {
@@ -107,7 +105,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return bookCommentRepository.getById(id).isPresent();
     }

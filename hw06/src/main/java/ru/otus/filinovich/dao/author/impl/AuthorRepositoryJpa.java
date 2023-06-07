@@ -1,16 +1,17 @@
-package ru.otus.filinovich.dao.author;
+package ru.otus.filinovich.dao.author.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
+import ru.otus.filinovich.dao.author.AuthorRepository;
 import ru.otus.filinovich.domain.Author;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class AuthorRepositoryJpa implements AuthorRepository {
 

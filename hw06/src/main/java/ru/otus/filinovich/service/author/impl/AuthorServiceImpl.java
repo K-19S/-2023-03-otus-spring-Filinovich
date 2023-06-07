@@ -1,11 +1,11 @@
-package ru.otus.filinovich.service.author;
+package ru.otus.filinovich.service.author.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.filinovich.dao.author.AuthorRepository;
 import ru.otus.filinovich.domain.Author;
-import ru.otus.filinovich.service.IOService;
+import ru.otus.filinovich.service.author.AuthorService;
+import ru.otus.filinovich.service.user.interaction.UserInteractionService;
 
 import java.util.List;
 
@@ -15,28 +15,23 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    private final IOService ioService;
+    private final UserInteractionService userInteractionService;
 
     @Override
-    @Transactional(readOnly = true)
     public List<Author> getAllAuthors() {
         return authorRepository.getAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Author getAuthorById(Long id) {
         return authorRepository.getById(id).orElseThrow();
     }
 
     @Override
     public Author getAuthorByIdWithPromptAll() {
-        getAllAuthors().forEach(author -> {
-            ioService.outputString(author.getId() + ". " + author.getName());
-        });
-        Author chosenAuthor = null;
+        Author chosenAuthor;
         do {
-            Long authorId = ioService.readLong();
+            Long authorId = userInteractionService.chooseAuthorIdFromList(getAllAuthors());
             chosenAuthor = getAuthorById(authorId);
         } while (chosenAuthor == null);
         return chosenAuthor;

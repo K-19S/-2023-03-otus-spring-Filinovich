@@ -1,12 +1,12 @@
-package ru.otus.filinovich.dao.book;
+package ru.otus.filinovich.dao.book.impl;
 
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityGraph;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
+import ru.otus.filinovich.dao.book.BookRepository;
 import ru.otus.filinovich.domain.Book;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
 
@@ -56,8 +56,6 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void deleteById(Long id) {
-        Query query = em.createQuery("delete from Book where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        getById(id).ifPresent(em::remove);
     }
 }

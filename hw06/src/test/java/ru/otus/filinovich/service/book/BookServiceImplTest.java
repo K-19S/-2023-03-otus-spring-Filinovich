@@ -12,9 +12,10 @@ import ru.otus.filinovich.dao.book.BookRepository;
 import ru.otus.filinovich.domain.Author;
 import ru.otus.filinovich.domain.Book;
 import ru.otus.filinovich.domain.Genre;
-import ru.otus.filinovich.service.IOService;
 import ru.otus.filinovich.service.author.AuthorService;
+import ru.otus.filinovich.service.book.impl.BookServiceImpl;
 import ru.otus.filinovich.service.genre.GenreService;
+import ru.otus.filinovich.service.user.interaction.UserInteractionService;
 import ru.otus.filinovich.util.MessageProvider;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ class BookServiceImplTest {
     private BookRepository bookRepository;
 
     @MockBean
-    private IOService ioService;
+    private UserInteractionService userInteractionService;
 
     @MockBean
     private GenreService genreService;
@@ -127,27 +128,27 @@ class BookServiceImplTest {
     public void getBookByIdWithPromptAllTest() {
         String prompt = "Test prompt";
         given(bookRepository.getAll()).willReturn(testBooks);
-        given(ioService.readLongWithPrompt(prompt)).willReturn(1L);
-        given(bookRepository.getById(1L)).willReturn(Optional.of(testBooks.get(0)));
+        given(bookRepository.getById(CORRECT_BOOK_ID)).willReturn(Optional.of(testBooks.get(0)));
+        given(userInteractionService.chooseBookIdFromList(testBooks)).willReturn(CORRECT_BOOK_ID);
 
         Book actual = bookService.getBookByIdWithPromptAll(prompt);
         Book expected = testBooks.get(0);
 
         assertThat(actual).isEqualTo(expected);
         verify(bookRepository, times(1)).getAll();
-        verify(ioService, times(1)).readLongWithPrompt(prompt);
-        verify(bookRepository, times(1)).getById(1L);
+        verify(bookRepository, times(1)).getById(CORRECT_BOOK_ID);
+        verify(userInteractionService, times(1)).chooseBookIdFromList(testBooks);
     }
 
     @Test
     public void createNewBookTest() {
         Book testBook = testBooks.get(0);
-        given(ioService.readStringWithPrompt(any())).willReturn(testBook.getName());
+        given(userInteractionService.getTextWithPrompt(any())).willReturn(testBook.getName());
         given(genreService.getGenreByIdWithPromptAll()).willReturn(testBook.getGenre());
         given(authorService.getAuthorByIdWithPromptAll()).willReturn(testBook.getAuthors().get(0));
         bookService.createNewBook();
 
-        verify(ioService, times(1)).readStringWithPrompt(any());
+        verify(userInteractionService, times(1)).getTextWithPrompt(any());
         verify(genreService, times(1)).getGenreByIdWithPromptAll();
         verify(authorService, times(1)).getAuthorByIdWithPromptAll();
         verify(bookRepository, times(1)).create(testBook);
@@ -183,9 +184,9 @@ class BookServiceImplTest {
         given(messageProvider.getMessage("book.name")).willReturn("Name");
         given(messageProvider.getMessage("book.author")).willReturn("Author");
         given(messageProvider.getMessage("book.genre")).willReturn("Genre");
-        given(ioService.readLongWithPrompt(null)).willReturn(1L);
+        given(userInteractionService.getLongWithPrompt(null)).willReturn(1L);
         String testName = "NewName";
-        given(ioService.readStringWithPrompt(anyString())).willReturn(testName);
+        given(userInteractionService.getTextWithPrompt(anyString())).willReturn(testName);
         bookService.updateBook(expectedBook);
         expectedBook.setName(testName);
 
@@ -199,7 +200,7 @@ class BookServiceImplTest {
         given(messageProvider.getMessage("book.name")).willReturn("Name");
         given(messageProvider.getMessage("book.author")).willReturn("Author");
         given(messageProvider.getMessage("book.genre")).willReturn("Genre");
-        given(ioService.readLongWithPrompt(null)).willReturn(2L);
+        given(userInteractionService.getLongWithPrompt(null)).willReturn(2L);
         given(authorService.getAuthorByIdWithPromptAll()).willReturn(testBooks.get(1).getAuthors().get(0));
         bookService.updateBook(expectedBook);
         expectedBook.setAuthors(testBooks.get(1).getAuthors());
@@ -214,7 +215,7 @@ class BookServiceImplTest {
         given(messageProvider.getMessage("book.name")).willReturn("Name");
         given(messageProvider.getMessage("book.author")).willReturn("Author");
         given(messageProvider.getMessage("book.genre")).willReturn("Genre");
-        given(ioService.readLongWithPrompt(null)).willReturn(3L);
+        given(userInteractionService.getLongWithPrompt(null)).willReturn(3L);
         given(genreService.getGenreByIdWithPromptAll()).willReturn(testBooks.get(1).getGenre());
         bookService.updateBook(expectedBook);
         expectedBook.setGenre(testBooks.get(1).getGenre());

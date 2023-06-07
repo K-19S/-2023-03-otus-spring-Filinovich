@@ -1,4 +1,4 @@
-package ru.otus.filinovich.service;
+package ru.otus.filinovich.service.io;
 
 public interface IOService {
 
@@ -8,7 +8,7 @@ public interface IOService {
 
     Long readLong();
 
-    Long readLong(Long min, Long max);
+    Long readLong(int min, int max);
 
     String readStringWithPrompt(String promt);
 
