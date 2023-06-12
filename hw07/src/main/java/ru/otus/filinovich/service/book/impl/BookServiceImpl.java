@@ -105,7 +105,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void updateBook(Book updatedBook) {
         Map<Long, String> fieldsMap = getBookFieldMap();
         Map<String, BookFieldUpdater> updatersMap = getBookUpdatersMapFromFieldsFromBook(fieldsMap, updatedBook);
@@ -120,6 +119,16 @@ public class BookServiceImpl implements BookService {
         } while (fieldName == null);
         updatersMap.get(fieldName).update();
         bookRepository.save(updatedBook);
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        if (bookRepository.existsById(id)) {
+            bookRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Map<Long, String> getBookFieldMap() {
@@ -147,16 +156,5 @@ public class BookServiceImpl implements BookService {
             updatedBook.setGenre(newGenre);
         });
         return updatersMap;
-    }
-
-    @Override
-    @Transactional
-    public boolean deleteById(Long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
     }
 }

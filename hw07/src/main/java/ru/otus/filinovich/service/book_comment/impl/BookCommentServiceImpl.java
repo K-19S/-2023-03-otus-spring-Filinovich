@@ -64,9 +64,7 @@ public class BookCommentServiceImpl implements BookCommentService {
         return comment.getBook().getName() + ", " + comment.getText();
     }
 
-
     @Override
-    @Transactional
     public BookComment createComment() {
         Book selectedBook = chooseBookFromList();
         String commentText = getNewCommentText();
@@ -77,7 +75,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    @Transactional
     public BookComment updateComment() {
         String commentPrompt = messageProvider.getMessage("comments.select_comment_id");
         Long commentId = userInteractionService.getLongWithPrompt(commentPrompt);
@@ -88,10 +85,24 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    @Transactional
     public String updateCommentAndGetDescription() {
         BookComment bookComment = updateComment();
         return getCommentDescription(bookComment);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return bookCommentRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        if (existsById(id)) {
+            bookCommentRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private String getNewCommentText() {
@@ -102,22 +113,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     private Book chooseBookFromList() {
         String bookPrompt = messageProvider.getMessage("comments.select_book_for_commenting");
         return bookService.getBookByIdWithPromptAll(bookPrompt);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return bookCommentRepository.findById(id).isPresent();
-    }
-
-    @Override
-    @Transactional
-    public boolean deleteById(Long id) {
-        if (existsById(id)) {
-            bookCommentRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }
