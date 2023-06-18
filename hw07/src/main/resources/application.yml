@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:hsqldb:mem:prod_db
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: never
+
+  liquibase:
+    enabled: true
+
+  jpa:
+    generate-ddl: false
+#    show-sql: true
+    hibernate:
+      ddl-auto: none
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+application:
+  locale: ru_RU
