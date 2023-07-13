@@ -68,7 +68,7 @@ public class DatabaseChangelog {
         books = repository.saveAll(books);
     }
 
-    @ChangeSet(order = "005", id="insertBookComments", author = "s_filinovich")
+    @ChangeSet(order = "005", id = "insertBookComments", author = "s_filinovich")
     public void insertBookComments(BookCommentRepository repository) {
         comments.add(new BookComment("Comment 1", books.get(0)));
         comments.add(new BookComment("Comment 2", books.get(1)));
