@@ -3,7 +3,7 @@ package ru.otus.filinovich.service;
 import ru.otus.filinovich.dao.QuestionDao;
 import ru.otus.filinovich.domain.ListOfQuestion;
 
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionDao questionDao;
 

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QuestionDaoCsv implements QuestionDao{
+public class QuestionDaoCsv implements QuestionDao {
 
     private static final String COMMA_SEPARATOR = ",";
 

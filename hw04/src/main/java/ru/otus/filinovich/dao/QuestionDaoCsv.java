@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionDaoCsv implements QuestionDao{
+public class QuestionDaoCsv implements QuestionDao {
 
     private static final String COMMA_SEPARATOR = ",";
 

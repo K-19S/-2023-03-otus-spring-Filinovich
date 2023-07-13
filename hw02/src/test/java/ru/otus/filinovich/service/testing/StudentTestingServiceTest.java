@@ -42,7 +42,7 @@ class StudentTestingServiceTest {
     }
 
     @Test
-    void studentImplCsvTest() throws IOException{
+    void studentImplCsvTest() throws IOException {
         try (BufferedReader mock = mock(BufferedReader.class)) {
             when(mock.readLine()).thenReturn("TestSurname", "TestName");
             when(testingService.getConsoleReader()).thenReturn(mock);

@@ -40,7 +40,7 @@ public class ConsoleIOService implements IOService {
             } catch (IOException e) {
                 outputString("Try again");
             }
-        } while(true);
+        } while (true);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ConsoleIOService implements IOService {
             } catch (NumberFormatException e) {
                 outputString("Try again");
             }
-        } while(true);
+        } while (true);
     }
 
     @Override
