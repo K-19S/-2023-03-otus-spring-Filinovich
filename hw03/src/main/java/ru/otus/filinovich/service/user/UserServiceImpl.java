@@ -9,7 +9,7 @@ import ru.otus.filinovich.utils.PropertiesProvider;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Getter
     private final User user = new User();

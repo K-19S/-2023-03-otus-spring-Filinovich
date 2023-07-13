@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class IoServiceImpl implements IoService{
+public class IoServiceImpl implements IoService {
 
     private final PrintStream printStream;
 

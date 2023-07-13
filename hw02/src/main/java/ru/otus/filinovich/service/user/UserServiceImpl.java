@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Getter
     private final User user = new User();
