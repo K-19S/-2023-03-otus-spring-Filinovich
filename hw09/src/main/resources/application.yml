@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      database: library
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  change-logs-scan-package:
+    - ru.otus.filinovich.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+application:
+  locale: en
