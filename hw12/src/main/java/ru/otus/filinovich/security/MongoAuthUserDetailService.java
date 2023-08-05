@@ -22,6 +22,9 @@ public class MongoAuthUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         ru.otus.filinovich.domain.User user = userRepository.findUserByUsername(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException(userName);
+        }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         user.getUserRoles()
                 .forEach(role -> {
