@@ -1,0 +1,29 @@
+spring:
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+    command:
+      version:
+        enabled: false
+
+  data:
+    mongodb:
+      database: library
+
+  datasource:
+    url: jdbc:hsqldb:mem:library_db
+    username: sa
+    password:
+
+app:
+  ages-count-to-add: 1
