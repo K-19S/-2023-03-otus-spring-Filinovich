@@ -1,0 +1,11 @@
+package ru.otus.filinovich.domain;
+
+public enum ButterflySpecies {
+    EASTERN_TIGER_SWALLOWTAIL,
+    BLACK_SWALLOWTAIL,
+    ZEBRA_SWALLOWTAIL,
+    PIPEVINE_SWALLOWTAIL,
+    SPICEBUSH_SWALLOWTAIL,
+    TWO_TAILED_SWALLOWTAIL,
+    UNKNOWN
+}
