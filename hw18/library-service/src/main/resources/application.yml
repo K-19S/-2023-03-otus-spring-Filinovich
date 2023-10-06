@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: library
+    instance_id: foo
+  data:
+    mongodb:
+      database: library
+  jmx:
+    enabled: true
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  change-logs-scan-package:
+    - ru.otus.filinovich.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+logging:
+  file:
+    name: /target/logs/${spring.application.name}/${spring.application.instance_id}.log
+
+server:
+  port: 8090
+
+eureka:
+  instance:
+    hostname: eureka
+    preferIpAddress: false
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka
+    register-with-eureka: false
+    fetch-registry: false
