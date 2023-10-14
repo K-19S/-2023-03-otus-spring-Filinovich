@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: library
+    instance_id: foo
+  data:
+    mongodb:
+      database: library
+  jmx:
+    enabled: true
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  change-logs-scan-package:
+    - ru.otus.filinovich.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+logging:
+  file:
+    name: /target/logs/${spring.application.name}/${spring.application.instance_id}.log
+
+server:
+  port: 0
+
+app:
+  jwtSecret: 8sCjFJYPkEDLwTaZ1HXYdmOP3lBttvjqfzM6StcmYybIKcdUYTwIO2HvrMBpnuPLROAl4k7B2nOmbmjjA62gJQHny3IdBkeHGWDHd8JfiYIgwjIlvS7csrJclWjpAZuWNfSiGElTk6KhA8UwzjJvnQKEdNIbYlKQ4qgez0FKiDqjdTFoqttmBEL1QKbrYGXXxrewLtrMe8QEZfABmnOQDWF2sVu6zxQ4ze7J6CFiNJjSDIAIe3QNgWrfirGuQTlT
+  jwtExpirationMs: 86400000
